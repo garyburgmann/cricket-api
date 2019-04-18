@@ -1,0 +1,9 @@
+# secrets
+.env
+
+# code editor stuff
+.vscode/
+
+# pycache
+__pycache__/
+*.pyc
