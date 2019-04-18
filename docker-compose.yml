@@ -1,6 +1,21 @@
 version: '3.7'
 
 services:
+  api:
+    build:
+      context: .
+    container_name: cricket-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/code
+    networks:
+      - backend
+  
   mongodb:
     image: mongo:latest
     container_name: cricket-mongodb
@@ -14,6 +29,10 @@ services:
       - 27017:27017
     volumes:
       - cricket-mongodb:/data/db
+    networks:
+      - backend
 
 volumes:
   cricket-mongodb:
+networks:
+  backend:
