@@ -17,6 +17,8 @@ class MongoDBManager:
     def process_resource(self, req, resp, resource, params):
         resource.client = self._client
         resource.db = self._db
+        if hasattr(resource, '__collection__'):
+            resource.collection = resource.db[resource.__collection__]
         if params.get('oid'):
            resource.object_id = self.get_object_id(params['oid'])
 
