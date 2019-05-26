@@ -15,8 +15,8 @@ class UserResource(BaseResource):
 
     def on_get(self, req, resp):
         users = self.session.query(User).all()
-        resp.body = json.dumps({'count': [str(x.uuid) for x in users]})
-
+        # resp.body = json.dumps({'count': [str(x.uuid) for x in users]})
+        resp.media = {'count': [str(x.uuid) for x in users]}
 
 class UserDetailResource(BaseDetailResource):
     __collection__ = 'users'
