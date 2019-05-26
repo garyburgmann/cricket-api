@@ -11,6 +11,7 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
+      - db
     volumes:
       - .:/code
     networks:
@@ -34,7 +35,25 @@ services:
     networks:
       - backend
 
+  db:
+    image: postgres
+    container_name: cricket-pg
+    restart: always
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      # PGDATA
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - "cricket-pg-data:/var/lib/postgresql/data"
+    networks:
+      - backend
+
 volumes:
   cricket-mongodb:
+  cricket-pg-data:
+
 networks:
   backend:
