@@ -47,13 +47,13 @@ services:
       # PGDATA
       POSTGRES_DB: ${DB_NAME}
     volumes:
-      - "cricket-pg-data:/var/lib/postgresql/data"
+      - "cricket-db:/var/lib/postgresql/data"
     networks:
       - backend
 
 volumes:
   cricket-mongodb:
-  cricket-pg-data:
+  cricket-db:
 
 networks:
   backend:

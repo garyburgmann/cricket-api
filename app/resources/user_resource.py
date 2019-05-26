@@ -1,14 +1,21 @@
 """
 Module housing resource handlers for User collection and detail endpoints
 """
+import json
+
 import falcon
 from bson.json_util import dumps
 
 from app.resources import BaseDetailResource, BaseResource
+from app.models import User
 
 
 class UserResource(BaseResource):
     __collection__ = 'users'
+
+    def on_get(self, req, resp):
+        users = self.session.query(User).all()
+        resp.body = json.dumps({'count': [str(x.uuid) for x in users]})
 
 
 class UserDetailResource(BaseDetailResource):
