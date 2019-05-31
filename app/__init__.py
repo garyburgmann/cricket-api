@@ -5,14 +5,14 @@ import falcon
 
 from app import (
     settings,
-    mongo,
     db,
     middleware
 )
 
+Session = db.get_session(settings.DB_URI)
+
 api = falcon.API(middleware=[
-    middleware.MongoDBManager(mongo.client),
-    middleware.SQLAlchemySessionManager(db.Session)
+    middleware.SQLAlchemySessionManager(Session)
 ])
 
 # avoid circular imports
