@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from manager import Manager
 
 from app.database.seeds import database_seeder

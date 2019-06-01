@@ -17,11 +17,19 @@ class UserResource(BaseResource):
     __collection__ = 'users'
 
     def on_get(self, req, resp):
-        users = self.session.query(User).all()
+        queryset = self.session.query(User)
         # log.info('Users list')
-        resp.media = {
-            'data': User.json_collection(users)
-        }
+        resp.media = User.json_collection(
+            queryset,
+            paginated=True,
+            **req.params
+        )
+    
+    def on_post(self, req, resp):
+        user = User.create(self.session, req.media)
+        resp.status = falcon.HTTP_CREATED
+        resp.media = user.json()
+        self.session.commit()
 
 class UserDetailResource:
     __collection__ = 'users'

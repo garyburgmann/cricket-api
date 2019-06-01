@@ -14,4 +14,4 @@ class SQLAlchemySessionManager:
 
     def process_response(self, req, resp, resource, req_succeeded):
         if hasattr(resource, 'session'):
-            self.Session.remove()
+            self.Session.close()
