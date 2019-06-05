@@ -16,7 +16,6 @@ class Paginator:
         except Exception:
             raise Exception('Invalid page or page_size params')
 
-    
     def next(self):
         offset = (self.page - 1) * self.page_size
         return self.queryset.offset(offset).limit(self.page_size).all()
@@ -26,6 +25,6 @@ class Paginator:
 
     def response(self, schema):
         return dict(
-            data=schema.dump(self.next()).data,
+            data=schema.dump(self.next()),
             total=self.total()
         )

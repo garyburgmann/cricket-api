@@ -1,5 +1,6 @@
+import falcon
 import sqlalchemy as sa
-from marshmallow import ValidationError
+# from marshmallow import ValidationError
 
 from app.models import RootModel
 from app.serializers import UserSchema
@@ -24,24 +25,32 @@ class User(RootModel):
     )
 
     def json(self):
-        return self.__schema__().dump(self).data
+        return self.__schema__().dump(self)
 
     @classmethod
     def json_collection(cls, queryset, paginated=False, **kwargs):
         if paginated:
             paginator = Paginator(queryset=queryset, **kwargs)
             return paginator.response(schema=cls.__schema__(many=True))
-        return dict(data=cls.__schema__(many=True).dump(data).data)
+        return dict(data=cls.__schema__(many=True).dump(data))
 
     @classmethod
-    def create(cls, session, data):
+    def create(cls, data):
         try:
-            clean_data = cls.__schema__().load(data).data
+            clean_data = cls.__schema__().load(data)
             user = cls(**clean_data)
-            session.add(user)
-            session.flush()
             return user
-        except ValidationError as exc:
-            raise ValidationError(str(exc))
-        except sa.exc.IntegrityError as exc:
-            raise ValidationError(str(exc))
+        except Exception as exc:
+            raise falcon.HTTPBadRequest(
+                description=str(exc)
+            )
+
+    def update(self, data):
+        try:
+            clean_data = self.__schema__().load(data)
+            for key, val in clean_data.items():
+                setattr(self, key, val)
+        except Exception as exc:
+            raise falcon.HTTPBadRequest(
+                description=str(exc)
+            )
